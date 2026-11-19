@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1720, initial-scale=1">
+<title>Music UI · 1720×880</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#08080D}
+.stage{position:relative;overflow:hidden;width:1720px;height:880px;border-radius:26px;background:#0E0D15;padding:40px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#F2F1F6}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.5}
+.orb1{width:560px;height:560px;background:#534AB7;top:-160px;left:14%}
+.orb2{width:500px;height:500px;background:#1D9E75;bottom:-200px;left:42%}
+.orb3{width:600px;height:600px;background:#A32D5D;top:-80px;right:-100px}
+.app{position:relative;display:grid;grid-template-columns:1.7fr 1fr;height:100%;background:rgba(255,255,255,.055);backdrop-filter:blur(30px) saturate(1.4);-webkit-backdrop-filter:blur(30px) saturate(1.4);border:1px solid rgba(255,255,255,.1);border-radius:24px;box-shadow:0 14px 50px rgba(0,0,0,.38);overflow:hidden}
+.list{display:flex;flex-direction:column;padding:32px}
+.searchp{display:flex;flex-direction:column;padding:32px;border-left:1px solid rgba(255,255,255,.1)}
+.eyebrow{font-size:16px;letter-spacing:.12em;color:#AFA9EC;margin:0 0 8px}
+h1,h2{font-size:30px;font-weight:500;margin:0;letter-spacing:-.01em}
+.lhead{position:relative;display:flex;align-items:center;margin-bottom:26px}
+.lhead .ic{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+.ic{width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;padding:0;cursor:pointer;color:#A3A1B0;flex:none}
+.ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tracks{display:flex;flex-direction:column;gap:14px;flex:1;overflow:hidden}
+.row{position:relative;display:grid;grid-template-columns:34px 56px minmax(0,1fr) 92px;align-items:center;gap:20px;padding:14px 22px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);flex:1;min-height:0}
+.row.current{background:rgba(175,169,236,.09);border-color:rgba(175,169,236,.28);grid-template-columns:34px 56px minmax(0,1fr) 34px 92px}
+.row.current::after{content:"";position:absolute;inset:-5px;border-radius:21px;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(175,169,236,.85) 22%,rgba(175,169,236,.85) 78%,transparent) top/100% 5px no-repeat,linear-gradient(90deg,transparent,rgba(175,169,236,.65) 22%,rgba(175,169,236,.65) 78%,transparent) bottom/100% 5px no-repeat,linear-gradient(180deg,transparent,rgba(175,169,236,.6) 22%,rgba(175,169,236,.6) 78%,transparent) left/5px 100% no-repeat,linear-gradient(180deg,transparent,rgba(175,169,236,.6) 22%,rgba(175,169,236,.6) 78%,transparent) right/5px 100% no-repeat;filter:blur(6px)}
+.idx{font-size:18px;color:#6F6D7D;text-align:center}
+.idx.on{color:#AFA9EC;font-weight:500}
+.thumb{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff}
+.thumb svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.t1{background:#7F77DD}.t2{background:#1D9E75}.t3{background:#D4537E}.t4{background:#BA7517}.t5{background:#378ADD}
+.info{min-width:0}
+.name{font-size:22px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{display:flex;align-items:center;gap:10px;font-size:17px;line-height:23px;color:#8E8C9B;margin:5px 0 0;white-space:nowrap;overflow:hidden}
+.hq{flex:none;display:inline-flex;align-items:center;height:23px;font-size:12px;letter-spacing:.06em;color:#E9C274;border:1px solid rgba(233,194,116,.5);background:rgba(233,194,116,.1);border-radius:5px;padding:0 8px}
+.artist{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.dur{display:flex;align-items:center;gap:8px;font-size:18px;color:#6F6D7D;text-align:left;justify-self:start}
+.dur svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.playing{display:flex;align-items:flex-end;gap:2px;height:20px;justify-self:end}
+.playing i{width:3px;background:#AFA9EC;border-radius:2px;height:25%}
+.playing i:nth-child(1){animation:eq 1.4s ease-in-out infinite}
+.playing i:nth-child(2){animation:eq 1.4s ease-in-out infinite -0.175s}
+.playing i:nth-child(3){animation:eq 1.4s ease-in-out infinite -0.35s}
+.playing i:nth-child(4){animation:eq 1.4s ease-in-out infinite -0.525s}
+@keyframes eq{0%,100%{height:25%}50%{height:100%}}
+.heart svg{width:24px;height:24px}
+.row.current .heart{color:#ED93B1}
+.row.current .heart svg{fill:currentColor}
+.mini{margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08)}
+.bar{height:5px;border-radius:5px;background:rgba(255,255,255,.12)}
+.fill{width:35%;height:100%;border-radius:5px;background:#AFA9EC}
+.mini-row{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:20px}
+.mtitle{display:flex;align-items:center;gap:14px;min-width:0}
+.mcover{width:52px;height:52px;border-radius:12px;background:linear-gradient(145deg,#AFA9EC,#7F77DD);flex:none}
+.mname{font-size:20px;font-weight:500;margin:0}
+.msub{font-size:16px;color:#8E8C9B;margin:3px 0 0}
+.mctrl{display:flex;align-items:center;gap:22px}
+.vol svg{width:26px;height:26px}
+.shead{display:flex;align-items:center;margin-bottom:26px}
+.shead .hint{font-size:15px;color:#6F6D7D}
+.searchbox{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px 22px;font-size:22px;color:#F2F1F6}
+.searchbox svg{width:26px;height:26px;fill:none;stroke:#A3A1B0;stroke-width:1.8;stroke-linecap:round;flex:none}
+.searchbox .ph{color:#6F6D7D}
+.kbtools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:22px 2px 14px}
+.kbtools button{grid-column:span 3;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px 18px;font-size:17px;color:#B9B7C6;cursor:pointer}
+.kbtools svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.keys{flex:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));justify-items:center;align-items:center;gap:10px;min-height:0}
+.key{width:min(100%,calc((880px - 80px - 64px - 46px - 62px - 86px - 50px)/6 - 10px));aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.075);border-radius:14px;font-size:30px;font-weight:400;color:#E8E7EE;cursor:pointer;user-select:none}
+.key.pressed{background:#E24B4A;border-color:#E24B4A;color:#fff;box-shadow:0 8px 26px rgba(226,75,74,.4)}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+  <div class="app">
+    <section class="list">
+      <header class="lhead"><h1>PlayList</h1></header>
+      <div class="tracks">
+        <div class="row current"><span class="idx on">1</span><div class="thumb t1"><svg viewBox="0 0 24 24"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg></div><div class="info"><p class="name">Midnight City</p><p class="sub"><span class="hq">Hi-Res</span><span class="artist">M83 · Hurry Up, We're Dreaming</span></p></div><span class="playing"><i></i><i></i><i></i><i></i></span><span class="dur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>4:03</span></div>
+        <div class="row"><span class="idx">2</span><div class="thumb t2"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><div class="info"><p class="name">夜航西飞</p><p class="sub"><span class="hq">Hi-Res</span><span class="artist">落日飞车 · 爱你</span></p></div><span class="dur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>3:47</span></div>
+        <div class="row"><span class="idx">3</span><div class="thumb t3"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg></div><div class="info"><p class="name">Blinding Lights</p><p class="sub"><span class="hq">Hi-Res</span><span class="artist">The Weeknd · After Hours</span></p></div><span class="dur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>3:20</span></div>
+        <div class="row"><span class="idx">4</span><div class="thumb t4"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 21h14"/></svg></div><div class="info"><p class="name">晚风</p><p class="sub"><span class="hq">Hi-Res</span><span class="artist">春野 · 温柔的风</span></p></div><span class="dur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>4:12</span></div>
+        <div class="row"><span class="idx">5</span><div class="thumb t5"><svg viewBox="0 0 24 24"><path d="M4 16c4-2 4-10 8-10s4 8 8 10"/><path d="M4 20h16"/></svg></div><div class="info"><p class="name">Sunset Lover</p><p class="sub"><span class="hq">Hi-Res</span><span class="artist">Petit Biscuit · Petit Biscuit</span></p></div><span class="dur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>3:36</span></div>
+        <div class="row"><span class="idx">6</span><div class="thumb t1"><svg viewBox="0 0 24 24"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg></div><div class="info"><p class="name">Strobe</p><p class="sub"><span class="hq">Hi-Res</span><span class="artist">deadmau5 · For Lack of a Better Name</span></p></div><span class="dur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:37</span></div>
+      </div>
+    </section>
+    <section class="searchp">
+      <div class="shead"><h2>Search</h2></div>
+      <div class="searchbox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></svg><span class="ph">输入首字母搜索</span></div>
+      <div class="kbtools">
+        <button aria-label="清空"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>清空</button>
+        <button aria-label="退格"><svg viewBox="0 0 24 24"><path d="M9 5h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9L2 12l7-7z"/><path d="M12 9l6 6"/><path d="M18 9l-6 6"/></svg>退格</button>
+      </div>
+      <div class="keys">
+        <div class="key">A</div><div class="key">B</div><div class="key">C</div><div class="key">D</div><div class="key">E</div><div class="key">F</div>
+        <div class="key">G</div><div class="key">H</div><div class="key">I</div><div class="key">J</div><div class="key">K</div><div class="key">L</div>
+        <div class="key">M</div><div class="key">N</div><div class="key">O</div><div class="key pressed">P</div><div class="key">Q</div><div class="key">R</div>
+        <div class="key">S</div><div class="key">T</div><div class="key">U</div><div class="key">V</div><div class="key">W</div><div class="key">X</div>
+        <div class="key">Y</div><div class="key">Z</div><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">4</div>
+        <div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">0</div>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
